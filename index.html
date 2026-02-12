@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso Protegido - Documentos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 500px;
+            width: 100%;
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        label {
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        input[type="password"] {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .error {
+            color: #e74c3c;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+            padding: 10px;
+            background: #ffe5e5;
+            border-radius: 6px;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .content {
+            display: none;
+        }
+        
+        .content.visible {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .success-message {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #28a745;
+            font-weight: 500;
+        }
+        
+        h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        
+        .file-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .file-list li {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            transition: background 0.2s;
+        }
+        
+        .file-list li:hover {
+            background: #f8f9fa;
+        }
+        
+        .file-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .file-list a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: color 0.2s;
+        }
+        
+        .file-list a:hover {
+            color: #764ba2;
+        }
+        
+        .file-icon {
+            font-size: 24px;
+        }
+        
+        .instructions {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #856404;
+        }
+        
+        .instructions strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="loginSection">
+            <h1>🔒 Acesso Protegido</h1>
+            <p class="subtitle">Digite a senha para acessar os documentos</p>
+            
+            <form class="login-form" onsubmit="verificarSenha(event)">
+                <div class="form-group">
+                    <label for="senha">Senha:</label>
+                    <input type="password" id="senha" required autocomplete="off" placeholder="Digite a senha">
+                </div>
+                
+                <button type="submit">🔓 Acessar Documentos</button>
+                
+                <p class="error" id="erro">❌ Senha incorreta. Tente novamente.</p>
+            </form>
+        </div>
+        
+        <div id="contentSection" class="content">
+            <div class="success-message">
+                ✅ Acesso liberado com sucesso!
+            </div>
+            
+            <h2>📄 Documentos Disponíveis</h2>
+            
+            <ul class="file-list">
+                <li>
+                    <a href="https://drive.google.com/file/d/16Ci0-EsKHaIPtu9tcKN3dUDUtvRIDHsq/view?usp=drive_link" target="_blank">
+                        <span class="file-icon">📕</span>
+                        <span>Proc. Adm. 0000296.15.09-2021 - COMPRA (PRINCIPAL) - TOMADA DE PREÇOS.pdf (176,5 MB)</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://drive.google.com/file/d/1Hs4eXwKMxvBeesAqzvgdkG6nJbUDUu8_/view?usp=drive_link" target="_blank">
+                        <span class="file-icon">📗</span>
+                        <span>Proc. Adm. 0001360.25.09-2021 - CONVÊNIO (PRINCIPAL) - CONVÊNIO ESTADUAL.pdf (215,2 MB)</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="instructions">
+                <strong>ℹ️ Como usar:</strong>
+                Clique em qualquer documento acima para visualizar ou baixar. Os arquivos abrem em uma nova aba do navegador.
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // CONFIGURE AQUI: Cole o hash SHA-256 da sua senha
+        // Para gerar o hash: https://emn178.github.io/online-tools/sha256.html
+        const senhaCorreta = "4a166b69b6b62a13a6910fe9ee86830c1966e156eb3c402bb0fb1139332b6f50";
+        
+        async function hashSenha(senha) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(senha);
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hash))
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+        }
+        
+        async function verificarSenha(event) {
+            event.preventDefault();
+            
+            const senhaInput = document.getElementById('senha');
+            const erro = document.getElementById('erro');
+            const loginSection = document.getElementById('loginSection');
+            const contentSection = document.getElementById('contentSection');
+            
+            const senhaHash = await hashSenha(senhaInput.value);
+            
+            if (senhaHash === senhaCorreta) {
+                loginSection.style.display = 'none';
+                contentSection.classList.add('visible');
+            } else {
+                erro.style.display = 'block';
+                senhaInput.value = '';
+                senhaInput.focus();
+                
+                setTimeout(() => {
+                    erro.style.display = 'none';
+                }, 3000);
+            }
+        }
+        
+        // Limpa o erro ao digitar
+        document.getElementById('senha').addEventListener('input', function() {
+            document.getElementById('erro').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
